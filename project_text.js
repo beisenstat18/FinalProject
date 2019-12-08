@@ -11,20 +11,37 @@ var time=15;
 var begin;
 var duration=15;
 var level=1;
+var happybackground;
+var y=0;
+var x=200;
+var size1=0;
+var size2=0;
+var placex;
+var placey;
+var torah; 
+var rot=2;
+var dark;
+var row;
+var column=0;
+var timesused=0;
 
 // var xlocation=random(0,800);
 // var ylocation=random(0,600);
-
+function preload(){
+	seed=loadImage('fishhead.png');
+	happybackground=loadImage('background.png');
+	dark=loadImage('darkbackground.png');
+	initial=loadImage('plastic-bottles-750.jpg');
+	theFont=loadFont('FindetNemo-KVxD.ttf');
+}
 function setup() {
   createCanvas(windowWidth, windowHeight);
 	background(0);
 	//load images
-	begin=millis();
-  bulletImage = loadImage('candy.png');  
+	bulletImage = loadImage('candy.png');  
   shipImage = loadImage('turtleside.png');
   particleImage = loadImage('duffcan1.png');
-	// create turtle sprite in middle of screen
-  ship = createSprite(width/2, height/2);
+	ship = createSprite(width/2, height/2);
   ship.maxSpeed = 6;
   ship.friction = 0.70;
 	// make nothing touch the turtle for a circle with radius of 20
@@ -45,71 +62,76 @@ function setup() {
 }
 
 function draw() {
-	if (level=1){
 		background(0);
-		fill(255);
-		// write the instructions within the code in the center 
-		textAlign(CENTER);
-		text('Controls: Arrow Keys + X', width/2, 20);
-	// go through list of sprites 
+		textFont(theFont,30);
+		fill(250);
+		text('CLICK SAVE THE SEA FROM POLLUTION!');
+		
+	
+		 	image(happybackground,0,0,width,height);
+		 	fill(255);
+		 	size1=size1+2;
+		 	size2=size2+1;
+		 	placex=0;
+		 	placey=0;
+		 	image(dark,placex,placey,size1,size2);
+		// ///////
 		for(var i=0; i<allSprites.length; i++) {
-			// at each sprite, make sure the sprite doesn't go beyond margin
-			var s = allSprites[i];
-			if(s.position.x<-MARGIN) s.position.x = width+MARGIN;
-			if(s.position.x>width+MARGIN) s.position.x = -MARGIN;
-			if(s.position.y<-MARGIN) s.position.y = height+MARGIN;
-			if(s.position.y>height+MARGIN) s.position.y = -MARGIN;
-		}
-	// 
+				// at each sprite, make sure the sprite doesn't go beyond margin
+				var s = allSprites[i];
+				if(s.position.x<-MARGIN) s.position.x = width+MARGIN;
+				if(s.position.x>width+MARGIN) s.position.x = -MARGIN;
+				if(s.position.y<-MARGIN) s.position.y = height+MARGIN;
+				if(s.position.y>height+MARGIN) s.position.y = -MARGIN;
+			}
 		asteroids.overlap(bullets, asteroidHit); //when asteroids overlap with bullets, asteroid Hit happens
 
-		ship.bounce(asteroids); //turtle does bouncing whatever that is with duff cans
-	// change this to change the greta movements
-		if(keyDown(LEFT_ARROW))
-			ship.rotation -= 4;
-		if(keyDown(RIGHT_ARROW))
-			ship.rotation += 4;
-		if(keyDown(UP_ARROW))
-		{
-	 //   ship.addSpeed(0.2, ship.rotation);
-		//  ship.changeAnimation('thrust'); //unnecessary, no thrusting involved 
-			//maybe change up and down so that greta doesn't just rotate, she moves?
-		}
-	//  else //this is extra because no thrust necessary
-	 //   ship.changeAnimation('normal');
-
-		if(keyWentDown('space'))
-		{
-			var bullet = createSprite(ship.position.x, ship.position.y); //change position of bullet so it leaves turtles face, not our of turtle, more like shooting
-			bullet.addImage(bulletImage);
-			bullet.setSpeed(10+ship.getSpeed(), ship.rotation);
-			bullet.life = 60; //make sure a bunch of gretas don't linger. after 30 draw cycles removed
-			bullets.add(bullet); 
-		}
-
- 	 	drawSprites();
-		time=duration-(millis()-begin)/1000;
-		text(time,width/2,30)
-		
-		if (time<0){
-			if (asteroids=0){
-				level+=1;
-				text('one step closer');
+			ship.bounce(asteroids); //turtle does bouncing whatever that is with duff cans
+		// change this to change the greta movements
+			if(keyDown(LEFT_ARROW))
+				ship.rotation -= 4;
+			if(keyDown(RIGHT_ARROW))
+				ship.rotation += 4;
+			if(keyDown(UP_ARROW))
+			{
+				ship.addSpeed(10,270);
 			}
-			else if(asteroids>0){
-				level=1;
-				text('you lose');
+			if (keyDown(DOWN_ARROW)){ //this is extra because no thrust necessary
+				ship.addSpeed(10,90);
 			}
-				
-		}
-			
-	}
-	// if (level=2){
-	// }
-	// if (level=3){
-	// }
-}	
-
+			if(keyWentDown('space'))
+			{
+				if (ship.rotation%360>90){
+					bullet = createSprite(ship.position.x, ship.position.y); //change position of bullet so it leaves turtles face, not our of turtle, more like shooting
+					bullet.addImage(bulletImage);
+					bullet.setSpeed(10+ship.getSpeed(), ship.rotation);
+					bullet.life = 60; //make sure a bunch of gretas don't linger. after 30 draw cycles removed
+					bullets.add(bullet); 
+				}
+				else {
+					bullet = createSprite(ship.position.x, ship.position.y); //change position of bullet so it leaves turtles face, not our of turtle, more like shooting
+					bullet.addImage(bulletImage);
+					bullet.setSpeed(10+ship.getSpeed(), ship.rotation);
+					bullet.life = 60; //make sure a bunch of gretas don't linger. after 30 draw cycles removed
+					bullets.add(bullet); 
+				}
+			}
+			drawSprites();
+		///////
+			if (size2>715 && timesused>15){
+				image(dark,0,0,width,height);
+				translate(random(0,width),y);
+				rotate(rot);
+				image(seed,0,0,400,400);
+				y+=5;
+				rot+=0.1;
+					if (y>height+80){
+						y=0;
+					}
+			}		
+	
+}
+/////
 function createAsteroid(type, x, y) {
   var a = createSprite(x, y);
   var img = loadImage('duffcan1.png');
@@ -128,10 +150,12 @@ function createAsteroid(type, x, y) {
   a.mass = 2+a.scale;
 //  a.setCollider('circle', 0, 0, 50);
   asteroids.add(a);
-  return a;
+		timesused++;
+	  return a;
 }
 
 function asteroidHit(asteroid, bullet) {
+	
   var newType = asteroid.type-1;
 
   if(newType>0) {
