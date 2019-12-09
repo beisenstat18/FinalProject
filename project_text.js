@@ -24,6 +24,7 @@ var dark;
 var row;
 var column=0;
 var timesused=0;
+let myBoolean;
 
 // var xlocation=random(0,800);
 // var ylocation=random(0,600);
@@ -33,6 +34,7 @@ function preload(){
 	dark=loadImage('darkbackground.png');
 	initial=loadImage('plastic-bottles-750.jpg');
 	theFont=loadFont('FindetNemo-KVxD.ttf');
+	//backgroundsound=loadSound('background.wav');
 }
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -63,11 +65,13 @@ function setup() {
 
 function draw() {
 		background(0);
-		textFont(theFont,30);
+		textFont(theFont,80);
+		//backgroundsound.play();
 		fill(250);
-		text('CLICK SAVE THE SEA FROM POLLUTION!');
+		image(happybackground,0,0,width,height);
+		text('CLICK Here to play and SAVE FISH FROM POLLUTION!',width/2-350,height/2-100,900,900);
 		
-	
+		if (myBoolean){
 		 	image(happybackground,0,0,width,height);
 		 	fill(255);
 		 	size1=size1+2;
@@ -85,7 +89,6 @@ function draw() {
 				if(s.position.y>height+MARGIN) s.position.y = -MARGIN;
 			}
 		asteroids.overlap(bullets, asteroidHit); //when asteroids overlap with bullets, asteroid Hit happens
-
 			ship.bounce(asteroids); //turtle does bouncing whatever that is with duff cans
 		// change this to change the greta movements
 			if(keyDown(LEFT_ARROW))
@@ -116,10 +119,26 @@ function draw() {
 					bullets.add(bullet); 
 				}
 			}
+
 			drawSprites();
 		///////
-			if (size2>715 && timesused>15){
+			if (timesused==15){
+				var frameone=frameCount;
+				image(happybackground,0,0,width,height);
+				textFont(theFont,80);
+				fill(250);
+				text('YOU Made it to level 2!',width/2-300,height/2-100,900,900);
+				var frametwo=frameCount;
+				if (frametwo-frameone==50){
+					text('The average person generates over 4 pounds of trash every day and about 1.5 tons of solid waste per year.',width/2-350,height/2-100,900,900);
+				}
+				
+			}
+			if (size2>715 && timesused!=15){
 				image(dark,0,0,width,height);
+				textFont(theFont,80);
+				fill(250);
+				text('YOU LOSE. THE FISH ARE DEAD.',width/2-350,height/2-100,900,900);
 				translate(random(0,width),y);
 				rotate(rot);
 				image(seed,0,0,400,400);
@@ -128,8 +147,8 @@ function draw() {
 					if (y>height+80){
 						y=0;
 					}
-			}		
-	
+			}	
+		}
 }
 /////
 function createAsteroid(type, x, y) {
@@ -150,14 +169,13 @@ function createAsteroid(type, x, y) {
   a.mass = 2+a.scale;
 //  a.setCollider('circle', 0, 0, 50);
   asteroids.add(a);
-		timesused++;
+	//	timesused++;
 	  return a;
 }
 
 function asteroidHit(asteroid, bullet) {
-	
+	timesused++;
   var newType = asteroid.type-1;
-
   if(newType>0) {
     createAsteroid(newType, asteroid.position.x, asteroid.position.y);
   //  createAsteroid(newType, asteroid.position.x, asteroid.position.y);
@@ -175,4 +193,6 @@ function asteroidHit(asteroid, bullet) {
   asteroid.remove();
 }
 
-
+function mousePressed(){
+	myBoolean=true; 
+}
