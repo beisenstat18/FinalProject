@@ -1,0 +1,47 @@
+textFont(theFont,80); 
+		fill(250);
+		image(happybackground,0,0,width,height); //display underwater background
+		animation(fish_move); //have fish move behind text 
+		text('CLICK Here to play and SAVE FISH FROM POLLUTION!',width/2-350,height/2-100,900,900); //display options
+		textFont(theFont,40);
+		text('Use arrows to move and rotate. Use space bar to shoot.',150,50); //instructions 
+		
+		if (myBoolean){ //when mousepressed is true 
+		 	image(happybackground,0,0,width,height); //refresh image to clear words 
+		 	fill(255);
+		 	size1=size1+2; 
+		 	size2=size2+1;
+		 	placex=0;
+		 	placey=0;
+		 	image(dark,placex,placey,size1,size2);
+
+
+if (timesused==15){ //if the amount of times hit a can is fifteen
+ 					image(happybackground,0,0,width,height); //refresh happy background
+					for (var b=0;b<width;b+=700){ //display lots of fish 
+					 	for (var c=0;c<height;c+=700){
+		 				animation(fish_move,b,c);
+					 	}
+					 }
+					textFont(theFont,100);
+					fill(250);
+					text('congrats!',width/2-300,height/2,900,900);
+					textFont(theFont,70);
+					text('You saved the fish!',width/2-300,height/2-100,900,900); //tell player they saved fish 
+						 
+ 				}		
+
+if (size2>720 && timesused!=15){ //if the size of scary background overtakes happy background before all cans are hit 
+				image(dark,0,0,width,height); //scary background becomes new background
+				textFont(theFont,80);
+				fill(250);
+				text('YOU LOSE. THE FISH ARE DEAD.',width/2-350,height/2-100,900,900); //you lose displayed 
+				translate(random(0,width),y); 
+				rotate(rot); //rotate fish randomly 
+				image(seed,0,0,600,600); //display fish 
+				y+=5; //increase y value of fish until y is greate height +80
+				rot+=0.1;
+					if (y>height+80){
+						y=0;
+					}
+			}
